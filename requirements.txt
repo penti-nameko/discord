@@ -1,0 +1,2 @@
+# 例 すでに仮想環境でパッケージをインストール済みなら
+pip freeze  requirements.txt
