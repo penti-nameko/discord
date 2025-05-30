@@ -1,3 +1,1 @@
-git add requirements.txt
-git commit -m "Add requirements.txt for pip install"
-git push
+pip freeze > requirements.txt
