@@ -1,2 +1,3 @@
-# 例 すでに仮想環境でパッケージをインストール済みなら
-pip freeze  requirements.txt
+git add requirements.txt
+git commit -m "Add requirements.txt for pip install"
+git push
