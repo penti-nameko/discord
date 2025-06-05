@@ -27,7 +27,7 @@ async def send_content(channel: discord.abc.Messageable, message: str = None, fi
                 with open(path, "rb") as f:
                    files.append(discord.File(f, filename=os.path.basename(path)))
             else:
-                printf("[WARNING] ファイルが見つかりません: {path}")
+                print("[WARNING] ファイルが見つかりません: {path}")
     if not message and not files:
         await channel.send("⚠️ メッセージもファイルも指定されていません。")
     else:
@@ -37,13 +37,13 @@ async def send_content(channel: discord.abc.Messageable, message: str = None, fi
     # 各サーバーごとに"ログ"チャンネルを探してメッセージ送信
 @bot.event
 async def on_ready():
-    printf("[INFO] Bot Online: {bot.user}")
+    print("[INFO] Bot Online: {bot.user}")
     # スラッシュコマンドを毎回同期
     try:
         synced = await bot.tree.sync()
-        printf("✅ スラッシュコマンド同期完了: {len(synced)} 件")
+        print("✅ スラッシュコマンド同期完了: {len(synced)} 件")
     except Exception as e:
-        printf("❌ スラッシュコマンド同期失敗: {e}")
+        print("❌ スラッシュコマンド同期失敗: {e}")
     # 各サーバーにログメッセージ送信
     for guild in bot.guilds:
         log_channel = discord.utils.find(
@@ -54,11 +54,11 @@ async def on_ready():
             try:
                 await send_content(log_channel, message="おはよ...ムニャ")
                 await send_content(log_channel, message=f"🔁 スラッシュコマンド {len(synced)} 件を同期しました")
-                print(f"✅ 起動ログ送信: {guild.name} → #{log_channel.name}")
+                print("✅ 起動ログ送信: {guild.name} → #{log_channel.name}")
             except Exception as e:
-                print(f"❌ 起動ログ送信失敗: {guild.name}: {e}")
+                print("❌ 起動ログ送信失敗: {guild.name}: {e}")
         else:
-            printf("⚠️ ログチャンネルが見つからない: {guild.name}")
+            print("⚠️ ログチャンネルが見つからない: {guild.name}")
 # --- 終了時ログ（"ログ"チャンネルを検索） ---
 def shutdown_handler():
     loop = asyncio.get_event_loop()
@@ -72,11 +72,11 @@ def shutdown_handler():
             if log_channel:
                 try:
                     await send_content(log_channel, message="うう.....フィグロスしてたのに...")
-                    printf("✅ 終了ログ送信: {guild.name} → #{log_channel.name}")
+                    print("✅ 終了ログ送信: {guild.name} → #{log_channel.name}")
                 except Exception as e:
-                    printf("❌ 終了ログ送信失敗: {guild.name}: {e}")
+                    print("❌ 終了ログ送信失敗: {guild.name}: {e}")
             else:
-                printf("⚠️ ログチャンネルが見つからない: {guild.name}")
+                print("⚠️ ログチャンネルが見つからない: {guild.name}")
         await bot.close()
     loop.create_task(shutdown())
 def setup_signal_handlers():
@@ -180,7 +180,7 @@ async def timer(interaction: discord.Interaction, minutes: int = 0, seconds: int
     try:
         await interaction.followup.send(f"✅ {interaction.user.mention} タイマーが終了しました！")
     except Exception as e:
-        printf("❌ タイマー通知送信失敗: {e}")
+        print("❌ タイマー通知送信失敗: {e}")
 #ping
 @bot.tree.command(name="ping", description="Botの応答速度を表示します")
 async def ping(interaction: discord.Interaction):
@@ -271,10 +271,10 @@ async def on_app_command_completion(interaction: discord.Interaction, command: d
     user = interaction.user
     guild_name = interaction.guild.name if interaction.guild else "DM"
     channel_name = interaction.channel.name if isinstance(interaction.channel, discord.TextChannel) else "DM"
-    printf("📘 コマンド実行: /{command.name}")
-    printf("  ┣ ユーザー: {user}（ID: {user.id}）")
-    printf("  ┣ サーバー: {guild_name}")
-    printf("  ┗ チャンネル: {channel_name}")
+    print("📘 コマンド実行: /{command.name}")
+    print("  ┣ ユーザー: {user}（ID: {user.id}）")
+    print("  ┣ サーバー: {guild_name}")
+    print("  ┗ チャンネル: {channel_name}")
 # --- Bot起動（トークンを入力してください） ---
 if __name__ == "__main__":
     token = os.getenv("DISCORD_BOT_TOKEN")
