@@ -36,17 +36,17 @@ async def send_content(channel: discord.abc.Messageable, message: str = None, fi
 # --- 起動時ログ（"ログ"チャンネルを検索） ---
 
 @bot.event
-print(f"[INFO] Bot Online: {bot.user}")
+printf("[INFO] Bot Online: {bot.user}")
     # 各サーバーごとに"ログ"チャンネルを探してメッセージ送信
 @bot.event
 async def on_ready():
-    print(f"[INFO] Bot Online: {bot.user}")
+    printf("[INFO] Bot Online: {bot.user}")
     # スラッシュコマンドを毎回同期
     try:
         synced = await bot.tree.sync()
-        print(f"✅ スラッシュコマンド同期完了: {len(synced)} 件")
+        printf("✅ スラッシュコマンド同期完了: {len(synced)} 件")
     except Exception as e:
-        print(f"❌ スラッシュコマンド同期失敗: {e}")
+        printf("❌ スラッシュコマンド同期失敗: {e}")
     # 各サーバーにログメッセージ送信
     for guild in bot.guilds:
         log_channel = discord.utils.find(
@@ -61,7 +61,7 @@ async def on_ready():
             except Exception as e:
                 print(f"❌ 起動ログ送信失敗: {guild.name}: {e}")
         else:
-            print(f"⚠️ ログチャンネルが見つからない: {guild.name}")
+            printf("⚠️ ログチャンネルが見つからない: {guild.name}")
 # --- 終了時ログ（"ログ"チャンネルを検索） ---
 def shutdown_handler():
     loop = asyncio.get_event_loop()
@@ -75,11 +75,11 @@ def shutdown_handler():
             if log_channel:
                 try:
                     await send_content(log_channel, message="うう.....フィグロスしてたのに...")
-                    print(f"✅ 終了ログ送信: {guild.name} → #{log_channel.name}")
+                    printf("✅ 終了ログ送信: {guild.name} → #{log_channel.name}")
                 except Exception as e:
-                    print(f"❌ 終了ログ送信失敗: {guild.name}: {e}")
+                    printf("❌ 終了ログ送信失敗: {guild.name}: {e}")
             else:
-                print(f"⚠️ ログチャンネルが見つからない: {guild.name}")
+                printf("⚠️ ログチャンネルが見つからない: {guild.name}")
         await bot.close()
     loop.create_task(shutdown())
 def setup_signal_handlers():
@@ -183,7 +183,7 @@ async def timer(interaction: discord.Interaction, minutes: int = 0, seconds: int
     try:
         await interaction.followup.send(f"✅ {interaction.user.mention} タイマーが終了しました！")
     except Exception as e:
-        print(f"❌ タイマー通知送信失敗: {e}")
+        printf("❌ タイマー通知送信失敗: {e}")
 #ping
 @bot.tree.command(name="ping", description="Botの応答速度を表示します")
 async def ping(interaction: discord.Interaction):
@@ -223,9 +223,9 @@ async def unban(interaction: discord.Interaction, user_id: str):
     try:
         user = await bot.fetch_user(int(user_id))
         await interaction.guild.unban(user)
-        await interaction.response.send_message(f"✅ BAN解除しました: {user}")
+        await interaction.response.send_message("✅ BAN解除しました: {user}")
     except Exception as e:
-        await interaction.response.send_message(f"❌ BAN解除に失敗しました: {e}", ephemeral=True)
+        await interaction.response.send_message("❌ BAN解除に失敗しました: {e}", ephemeral=True)
 #ルーレット選出
 @bot.tree.command(name="roulette", description="様々な条件でランダムに1人を選びます")
 @app_commands.describe(
@@ -267,31 +267,6 @@ async def roulette(
         return
     chosen = random.choice(members)
     await interaction.response.send_message(f"🎯 選ばれたのは… {chosen.mention} さんでした！")
-# 例: 質問チャンネルの名前
-QUESTION_CHANNEL_NAME = "質問"
-# 担当者のDiscordユーザーID（右クリック「IDをコピー」で取得）
-QUESTION_HANDLER_ID = 123456789012345678  # ← 実際のIDに置き換えてください
-@bot.event
-async def on_message(message):
-    # ボット自身のメッセージは無視
-    if message.author.bot:
-        return
-    # 質問チャンネルか確認
-    if message.channel.name == QUESTION_CHANNEL_NAME:
-        handler = await bot.fetch_user(QUESTION_HANDLER_ID)
-        if handler:
-            try:
-                embed = discord.Embed(
-                    title="📩 新しい質問が届きました",
-                    description=message.content,
-                    color=discord.Color.blue()
-                )
-                embed.set_author(name=f"{message.author}（{message.author.id}）")
-                embed.set_footer(text=f"サーバー: {message.guild.name} / チャンネル: #{message.channel.name}")
-                await handler.send(embed=embed)
-                print(f"✅ 質問をDMに転送: {message.author} → {handler}")
-            except Exception as e:
-                print(f"❌ DM送信失敗: {e}")
     # 他のコマンドにも影響させないため、on_messageの最後にこれを書く
     await bot.process_commands(message)
 @bot.event
@@ -299,10 +274,10 @@ async def on_app_command_completion(interaction: discord.Interaction, command: d
     user = interaction.user
     guild_name = interaction.guild.name if interaction.guild else "DM"
     channel_name = interaction.channel.name if isinstance(interaction.channel, discord.TextChannel) else "DM"
-    print(f"📘 コマンド実行: /{command.name}")
-    print(f"  ┣ ユーザー: {user}（ID: {user.id}）")
-    print(f"  ┣ サーバー: {guild_name}")
-    print(f"  ┗ チャンネル: {channel_name}")
+    printf("📘 コマンド実行: /{command.name}")
+    printf("  ┣ ユーザー: {user}（ID: {user.id}）")
+    printf("  ┣ サーバー: {guild_name}")
+    printf("  ┗ チャンネル: {channel_name}")
 # --- Bot起動（トークンを入力してください） ---
 if __name__ == "__main__":
     token = os.getenv("DISCORD_BOT_TOKEN")
