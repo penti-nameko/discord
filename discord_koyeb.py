@@ -359,4 +359,4 @@ async def on_app_command_completion(interaction: discord.Interaction, command: d
 
 
 # --- Bot起動（トークンを入力してください） ---
-bot.run("TOKEN")
+bot.run("DISCORD_BOT_TOKEN")
