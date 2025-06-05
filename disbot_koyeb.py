@@ -34,9 +34,6 @@ async def send_content(channel: discord.abc.Messageable, message: str = None, fi
         await channel.send(content=message or None, files=files if files else None)
 
 # --- 起動時ログ（"ログ"チャンネルを検索） ---
-
-@bot.event
-printf("[INFO] Bot Online: {bot.user}")
     # 各サーバーごとに"ログ"チャンネルを探してメッセージ送信
 @bot.event
 async def on_ready():
