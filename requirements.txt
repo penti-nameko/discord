@@ -1,3 +1,3 @@
 py-cord==2.4.1
-Flask
-discord.py==2.3.2
+aiohttp==3.8.6
+Flask==2.3.3
