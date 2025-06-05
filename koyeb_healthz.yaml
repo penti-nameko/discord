@@ -1,0 +1,16 @@
+name: discord-bot
+
+services:
+  - name: bot-service
+    dockerfile_path: Dockerfile
+    build_context: .
+    ports:
+      - port: 3000
+        protocol: http
+        public: true
+    instance_type: micro
+    routes:
+      - path: /healthz
+    envs:
+      - key: DISCORD_BOT_TOKEN
+        value: <あなたのDiscord Botトークン>
