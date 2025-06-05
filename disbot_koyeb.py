@@ -279,5 +279,5 @@ async def on_app_command_completion(interaction: discord.Interaction, command: d
 if __name__ == "__main__":
     token = os.getenv("DISCORD_BOT_TOKEN")
     if not token:
-        raise RuntimeError("DISCORD_BOT_TOKEN 環境変数が設定されていません。")
+        raise RuntimeError("DISCORD_BOT_TOKEN")
     bot.run(token)
