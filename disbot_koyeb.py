@@ -281,3 +281,21 @@ if __name__ == "__main__":
     if not token:
         raise RuntimeError("DISCORD_BOT_TOKEN")
     bot.run(token)
+
+# --- Flaskによるヘルスチェック用HTTPサーバー ---
+from flask import Flask
+import threading
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return "Bot is alive!", 200
+
+def run_flask():
+    port = int(os.environ.get("PORT", 3000))  # デフォルトは3000
+    app.run(host="0.0.0.0", port=port)
+
+# Flaskサーバーを別スレッドで実行
+threading.Thread(target=run_flask, daemon=True).start()
+
