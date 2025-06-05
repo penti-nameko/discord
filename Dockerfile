@@ -1,20 +1,19 @@
-FROM python:3.10-slim
 
-# 環境変数
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+FROM python:3.11-slim
 
-# 作業ディレクトリ作成
 WORKDIR /app
 
-# 依存ファイルをコピー
-COPY requirements.txt .
+# 必要ファイルをコンテナにコピー
+COPY disbot_koyeb.py ./
+# 初期化用ファイル（必要に応じて）
+COPY schedules.json ./
+COPY requirements.txt ./
 
 # パッケージをインストール
 RUN pip install --no-cache-dir -r requirements.txt
 
-# アプリコードをコピー
-COPY . .
+# ポートは公開しない（Koyeb ヘルスチェック無効化）
+# EXPOSE なし
 
-# 実行コマンド
+# 実行
 CMD ["python", "disbot_koyeb.py"]
