@@ -1,19 +1,21 @@
+FROM python:3.10-slim
 
-FROM python:3.11-slim
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# 必要なライブラリを追加
+RUN apt-get update && apt-get install -y gcc libffi-dev build-essential python3-dev
 
 WORKDIR /app
 
-# 必要ファイルをコンテナにコピー
-COPY disbot_koyeb.py ./
-# 初期化用ファイル（必要に応じて）
-COPY schedules.json ./
-COPY requirements.txt ./
+COPY requirements.txt .
 
-# パッケージをインストール
+# pip周りをアップグレード
+RUN pip install --upgrade pip setuptools wheel
+
+# ライブラリインストール
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ポートは公開しない（Koyeb ヘルスチェック無効化）
-# EXPOSE なし
+COPY . .
 
-# 実行
 CMD ["python", "disbot_koyeb.py"]
