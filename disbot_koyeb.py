@@ -27,7 +27,7 @@ async def send_content(channel: discord.abc.Messageable, message: str = None, fi
                 with open(path, "rb") as f:
                    files.append(discord.File(f, filename=os.path.basename(path)))
             else:
-                print(f"[WARNING] ファイルが見つかりません: {path}")
+                printf("[WARNING] ファイルが見つかりません: {path}")
     if not message and not files:
         await channel.send("⚠️ メッセージもファイルも指定されていません。")
     else:
