@@ -4,14 +4,15 @@ WORKDIR /app
 
 # 必要ファイルをコンテナにコピー
 COPY disbot_koyeb.py ./
-COPY schedules.json ./   # 初期化用、不要なら削除可
+# 初期化用ファイル（必要に応じて）
+COPY schedules.json ./
 COPY requirements.txt ./
 
-# ライブラリをインストール
+# パッケージをインストール
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ⚠️ ポートは明示的に公開しない（KoyebのTCPヘルスチェック対象にしない）
-# EXPOSE 8000 ← これを削除または記述しないことでヘルスチェック無効化
+# ポートは公開しない（Koyeb ヘルスチェック無効化）
+# EXPOSE なし
 
-# Botの起動コマンド
+# 実行
 CMD ["python", "disbot_koyeb.py"]
